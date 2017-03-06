@@ -12,7 +12,7 @@ define all the students.
 
 ## Find a student
 
-Write a function `is_student(who: Student) -> Bool` that returns `true` if its parameter is a student,
+Write a predicate `is_student(who: Term) -> Goal` that returns `true` if its parameter is a student,
 or `false` otherwise.
 
 ## Find all the students
@@ -26,7 +26,7 @@ Define it.
 
 ## Find attendances
 
-Write a goal `attends(who: Student, course: Course, year: Year) -> Bool` that returns `true`
+Write a goal `attends(who: Term, course: Term, year: Term) -> Goal` that returns `true`
 for the correct attendances.
 
 ## Find all students in Semantics 2017
