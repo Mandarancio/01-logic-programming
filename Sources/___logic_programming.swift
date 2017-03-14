@@ -90,7 +90,7 @@ func replace(term: Term, substitution: Substitution) -> Term {
   }
 }
 
-enum List: Term, CustomStringConvertible {
+enum MyList: Term, CustomStringConvertible {
     case empty
     case cons (element: Term, list: Term)
     var description: String {
@@ -102,9 +102,9 @@ enum List: Term, CustomStringConvertible {
       }
     }
     func equals(_ other: Term) -> Bool {
-        return (other is List) && (other as! List == self)
+        return (other is MyList) && (other as! MyList == self)
     }
-    static func ==(lhs: List, rhs: List) -> Bool {
+    static func ==(lhs: MyList, rhs: MyList) -> Bool {
         switch (lhs, rhs) {
         case (let .cons(element: el, list: ll), let .cons(element: er, list: lr)):
             return el.equals(er) && ll.equals(lr)
@@ -114,4 +114,13 @@ enum List: Term, CustomStringConvertible {
             return false
         }
     }
+}
+
+func list_size (list: Term, size: Term) -> Goal {
+    return (list === MyList.empty && size === Nat.zero) ||
+      delayed (fresh { x in fresh { y in fresh { z in
+        (list === MyList.cons (element: x, list: y)) &&
+        (size === Nat.succ (z)) &&
+        (list_size (list: y, size: z))
+      }}})
 }

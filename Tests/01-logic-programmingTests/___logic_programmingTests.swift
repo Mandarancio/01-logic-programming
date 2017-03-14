@@ -54,19 +54,39 @@ class ___logic_programmingTests: XCTestCase {
         //       }
         //   }
         // }
+        // do {
+        //   let goal = is_even (what: Nat.succ (Nat.succ (Nat.zero)))
+        //   for substitution in solve (goal) {
+        //     print ("substitution found")
+        //     for (_, value) in substitution.reified() {
+        //         print("* \(value)")
+        //     }
+        //   }
+        // }
+        // do {
+        //     let v = Variable(named:"v")
+        //     let goal = is_even (what: v)
+        //     print ("ici")
+        //     for substitution in solve (goal) {
+        //         print ("substitution found")
+        //         for (variable, value) in substitution.reified() {
+        //             let term = replace (term: value, substitution: substitution)
+        //             print("* \(variable) = \(term)")
+        //         }
+        //     }
+        // }
+        // do {
+        //     let goal = list_size (list: MyList.cons (element: Nat.zero, list: MyList.empty), size: Nat.zero)
+        //     for substitution in solve (goal) {
+        //         print ("substitution found")
+        //         for (variable, value) in substitution.reified() {
+        //             let term = replace (term: value, substitution: substitution)
+        //             print("* \(variable) = \(term)")
+        //         }
+        //     }
+        // }
         do {
-          let goal = is_even (what: Nat.succ (Nat.succ (Nat.zero)))
-          for substitution in solve (goal) {
-            print ("substitution found")
-            for (_, value) in substitution.reified() {
-                print("* \(value)")
-            }
-          }
-        }
-        do {
-            let v = Variable(named:"v")
-            let goal = is_even (what: v)
-            print ("ici")
+            let goal = list_size (list: MyList.cons (element: Nat.zero, list: MyList.empty), size: Nat.succ (Nat.zero))
             for substitution in solve (goal) {
                 print ("substitution found")
                 for (variable, value) in substitution.reified() {
