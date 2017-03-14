@@ -55,7 +55,7 @@ class ___logic_programmingTests: XCTestCase {
         //   }
         // }
         // do {
-        //   let goal = is_even (what: Nat.succ (Nat.succ (Nat.zero)))
+        //   let goal = is_even (what: succ (succ (zero)))
         //   for substitution in solve (goal) {
         //     print ("substitution found")
         //     for (_, value) in substitution.reified() {
@@ -75,8 +75,19 @@ class ___logic_programmingTests: XCTestCase {
         //         }
         //     }
         // }
+        do {
+            let v = Variable(named: "list")
+            let y = Variable(named: "size")
+            let goal = list_size (list: v, size: succ(zero))
+            for substitution in solve (goal) {
+                print ("substitution found")
+                for (variable, value) in substitution.reified() {
+                    print("* \(variable) = \(value)")
+                }
+            }
+        }
         // do {
-        //     let goal = list_size (list: MyList.cons (element: Nat.zero, list: MyList.empty), size: Nat.zero)
+        //     let goal = list_size (list: MyList.cons (element: Nat.zero, list: MyList.empty), size: Nat.succ (Nat.zero))
         //     for substitution in solve (goal) {
         //         print ("substitution found")
         //         for (variable, value) in substitution.reified() {
@@ -85,16 +96,6 @@ class ___logic_programmingTests: XCTestCase {
         //         }
         //     }
         // }
-        do {
-            let goal = list_size (list: MyList.cons (element: Nat.zero, list: MyList.empty), size: Nat.succ (Nat.zero))
-            for substitution in solve (goal) {
-                print ("substitution found")
-                for (variable, value) in substitution.reified() {
-                    let term = replace (term: value, substitution: substitution)
-                    print("* \(variable) = \(term)")
-                }
-            }
-        }
     }
 
 

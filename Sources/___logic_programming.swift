@@ -7,6 +7,7 @@
 import LogicKit
 
 
+
 // First, we create an enumeration to represent the different Pokemon.
 enum Person: Term {
 
@@ -43,84 +44,35 @@ func is_student(who: Term) -> Goal {
 //             grass(lhs) && water(rhs)
 // }
 
-enum Nat: Term, CustomStringConvertible {
-    case zero
-    case succ (Term)
-    var description: String {
-      get {
-        switch (self) {
-        case .zero: return "0"
-        case let .succ(x): return "s." + String (describing: x)
-        }
-      }
-    }
-    func equals(_ other: Term) -> Bool {
-        return (other is Nat) && (other as! Nat == self)
-    }
-    static func ==(lhs: Nat, rhs: Nat) -> Bool {
-        switch (lhs, rhs) {
-        case (let .succ(l), let .succ(r)):
-            return l.equals(r)
-        case (.zero, .zero):
-            return true
-        default:
-            return false
-        }
-    }
+let zero = Value("0")
+
+func succ(_ x: Term) -> Map {
+  return ["succ": x]
 }
 
 func is_even(what: Term) -> Goal {
-    return (what === Nat.zero) ||
+    return (what === zero) ||
            delayed (fresh { x in
-             what === Nat.succ(Nat.succ(x)) &&
+             what === succ(succ(x)) &&
              is_even(what:x)
            })
 }
 
-func replace(term: Term, substitution: Substitution) -> Term {
-  switch (term) {
-  case Nat.zero:
-    return Nat.zero
-  case is Variable:
-    return replace(term: substitution [term], substitution: substitution)
-  case let Nat.succ(x):
-    return Nat.succ(replace(term: x, substitution: substitution))
-  default:
-    return term
-  }
+let empty = Value("[]")
+
+func cons(_ element: Term, _ list: Term) -> Map
+{
+  return ["head": element, "rest" : list]
 }
 
-enum MyList: Term, CustomStringConvertible {
-    case empty
-    case cons (element: Term, list: Term)
-    var description: String {
-      get {
-        switch (self) {
-        case .empty: return "[]"
-        case let .cons(element: e, list: l): return String (describing: e) + ":" + String (describing: l)
-        }
-      }
-    }
-    func equals(_ other: Term) -> Bool {
-        return (other is MyList) && (other as! MyList == self)
-    }
-    static func ==(lhs: MyList, rhs: MyList) -> Bool {
-        switch (lhs, rhs) {
-        case (let .cons(element: el, list: ll), let .cons(element: er, list: lr)):
-            return el.equals(er) && ll.equals(lr)
-        case (.empty, .empty):
-            return true
-        default:
-            return false
-        }
-    }
-}
+
 
 func list_size (list: Term, size: Term) -> Goal {
-    return (list === MyList.empty && size === Nat.zero) ||
+    return (list === empty && size === zero) ||
       delayed (fresh { x in fresh { y in fresh { z in
-        (list === MyList.cons (element: x, list: y)) &&
-        (size === Nat.succ (z)) &&
+        (is_student(who: x)) &&
+        (list === cons (x,  y)) &&
+        (size === succ (z)) &&
         (list_size (list: y, size: z))
       }}})
 }
