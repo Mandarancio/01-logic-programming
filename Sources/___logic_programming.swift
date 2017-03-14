@@ -43,9 +43,17 @@ func is_student(who: Term) -> Goal {
 //             grass(lhs) && water(rhs)
 // }
 
-enum Nat: Term {
+enum Nat: Term, CustomStringConvertible {
     case zero
     case succ (Term)
+    var description: String {
+      get {
+        switch (self) {
+        case .zero: return "0"
+        case let .succ(x): return "s." + String (describing: x)
+        }
+      }
+    }
     func equals(_ other: Term) -> Bool {
         return (other is Nat) && (other as! Nat == self)
     }
@@ -63,8 +71,21 @@ enum Nat: Term {
 
 func is_even(what: Term) -> Goal {
     return (what === Nat.zero) ||
-           fresh { x in
+           delayed (fresh { x in
              what === Nat.succ(Nat.succ(x)) &&
              is_even(what:x)
-           }
+           })
+}
+
+func replace(term: Term, substitution: Substitution) -> Term {
+  switch (term) {
+  case Nat.zero:
+    return Nat.zero
+  case is Variable:
+    return replace(term: substitution [term], substitution: substitution)
+  case let Nat.succ(x):
+    return Nat.succ(replace(term: x, substitution: substitution))
+  default:
+    return term
+  }
 }
