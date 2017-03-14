@@ -89,3 +89,29 @@ func replace(term: Term, substitution: Substitution) -> Term {
     return term
   }
 }
+
+enum List: Term, CustomStringConvertible {
+    case empty
+    case cons (element: Term, list: Term)
+    var description: String {
+      get {
+        switch (self) {
+        case .empty: return "[]"
+        case let .cons(element: e, list: l): return String (describing: e) + ":" + String (describing: l)
+        }
+      }
+    }
+    func equals(_ other: Term) -> Bool {
+        return (other is List) && (other as! List == self)
+    }
+    static func ==(lhs: List, rhs: List) -> Bool {
+        switch (lhs, rhs) {
+        case (let .cons(element: el, list: ll), let .cons(element: er, list: lr)):
+            return el.equals(er) && ll.equals(lr)
+        case (.empty, .empty):
+            return true
+        default:
+            return false
+        }
+    }
+}
