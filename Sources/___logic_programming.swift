@@ -42,3 +42,29 @@ func is_student(who: Term) -> Goal {
 //             fire(lhs) && grass(rhs) ||
 //             grass(lhs) && water(rhs)
 // }
+
+enum Nat: Term {
+    case zero
+    case succ (Term)
+    func equals(_ other: Term) -> Bool {
+        return (other is Nat) && (other as! Nat == self)
+    }
+    static func ==(lhs: Nat, rhs: Nat) -> Bool {
+        switch (lhs, rhs) {
+        case (let .succ(l), let .succ(r)):
+            return l.equals(r)
+        case (.zero, .zero):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+func is_even(what: Term) -> Goal {
+    return (what === Nat.zero) ||
+           fresh { x in
+             what === Nat.succ(Nat.succ(x)) &&
+             is_even(what:x)
+           }
+}
